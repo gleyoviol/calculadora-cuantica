@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Cuántica del Nombre Álmico</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; background: #0d0d0d; color: #fff; text-align: center; padding: 2em; }
+    input, button { padding: 0.5em; font-size: 1em; margin: 0.5em; border-radius: 8px; border: none; }
+    button { background-color: #6a00ff; color: white; cursor: pointer; }
+    .result { margin-top: 2em; font-size: 1.2em; color: #8affff; }
+    .report { background-color: #1e1e1e; padding: 1em; margin-top: 1em; border-radius: 10px; color: #fff; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; }
+  </style>
+</head>
+<body>
+  <h1>🔮 Calculadora Cuántica del Nombre Álmico</h1>
+  <p>Ingresa tu fecha de nacimiento para descubrir tu Código Cuántico.</p>
+
+  <input type="date" id="fechaNacimiento">
+  <button onclick="calcularCodigo()">Desbloquear Código</button>
+
+  <div class="result" id="resultado"></div>
+  <div class="report" id="reporteFinal"></div>
+
+  <script>
+    function esNumeroMaestro(num) {
+      const maestros = [11, 22, 33, 44, 55, 66, 77, 88, 99];
+      return maestros.includes(num);
+    }
+
+    function reducirNumero(num) {
+      if (esNumeroMaestro(num)) return num;
+      let suma = num;
+      while (suma > 9 && !esNumeroMaestro(suma)) {
+        suma = suma.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+      }
+      return suma;
+    }
+
+    function numeroABinario(num) {
+      return num.toString(2);
+    }
+
+    function binarioAAscii(bin) {
+      let ascii = '';
+      for (let i = 0; i < bin.length; i += 8) {
+        let byte = bin.slice(i, i + 8);
+        if (byte.length === 8) {
+          ascii += String.fromCharCode(parseInt(byte, 2));
+        }
+      }
+      return ascii || '[Fragmento incompleto]' ;
+    }
+
+    function simbolosRunicos(codigo) {
+      const mapaRunas = {
+        '1': 'ᛁ (Isa - quietud)',
+        '2': 'ᚢ (Uruz - fuerza)',
+        '3': 'ᚦ (Thurisaz - desafío)',
+        '4': 'ᚨ (Ansuz - comunicación)',
+        '5': 'ᚱ (Raido - viaje)',
+        '6': 'ᚷ (Gebo - regalo)',
+        '7': 'ᚺ (Hagalaz - transformación)',
+        '8': 'ᛉ (Algiz - protección)',
+        '9': 'ᛞ (Dagaz - despertar)',
+        '0': 'ᛗ (Mannaz - humanidad)'
+      };
+      return codigo.split('').map(d => mapaRunas[d] || '').join(', ');
+    }
+
+    function calcularCodigo() {
+      const fecha = document.getElementById('fechaNacimiento').value;
+      if (!fecha) return alert('Por favor, ingresa tu fecha de nacimiento');
+
+      const partes = fecha.split('-'); // formato YYYY-MM-DD
+      const anio = parseInt(partes[0]);
+      const mes = parseInt(partes[1]);
+      const dia = parseInt(partes[2]);
+
+      const diaReducido = reducirNumero(dia);
+      const mesReducido = mes === 5 ? 5 : reducirNumero(mes);
+      const anioSuma = anio.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+      const anioReducido = reducirNumero(anioSuma);
+      const sumaTotal = reducirNumero(diaReducido + mesReducido + anioReducido);
+
+      const codigoCuantico = `${diaReducido}${mesReducido}${sumaTotal}${anioReducido}`;
+
+      // Conversión a binario
+      const binarios = codigoCuantico.split('').map(n => numeroABinario(parseInt(n))).join('');
+      const ascii = binarioAAscii(binarios);
+      const runas = simbolosRunicos(codigoCuantico);
+
+      const resultado = `Tu Código Cuántico es: [${diaReducido}, ${mesReducido}, ${sumaTotal}, ${anioReducido}] → ${codigoCuantico}`;
+      const reporte = `
+        📊 <strong>Reporte Cuántico</strong><br>
+        ➤ Código Cuántico: <strong>${codigoCuantico}</strong><br>
+        ➤ Binario: <code>${binarios}</code><br>
+        ➤ Letras ASCII: <strong>${ascii}</strong><br>
+        ➤ Runas Asociadas: <em>${runas}</em><br>
+        🧬 Este código representa una frecuencia única de tu alma. Las runas revelan cualidades esenciales y la vibración de tu nombre álmico.
+      `;
+
+      document.getElementById('resultado').innerText = resultado;
+      document.getElementById('reporteFinal').innerHTML = reporte;
+    }
+  </script>
+</body>
+</html>
